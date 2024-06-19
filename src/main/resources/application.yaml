@@ -1,9 +1,8 @@
 spring:
   datasource:
-    url: "jdbc:mysql://localhost/mobile-app-ws?useSSL=false&allowMultiQueries=true&serverTimezone=UTC&allowPublicKeyRetrieval=True"
-    ##jdbc:mysql://localhost/mobile-app-ws?useSSL=false&allowMultiQueries=true
-    username:
-    password:
+    url: ${DB_URL}
+    username: ${USER_NAME}
+    password: ${PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
