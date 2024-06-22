@@ -13,3 +13,5 @@ spring:
 otp:
   expiry:
     time: 10400000
+server:
+  port: 9215
