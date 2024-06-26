@@ -1,6 +1,6 @@
 package com.example.mawqifi.features.profile.controller.model
 
-import com.example.mawqifi.features.profile.service.model.CreateVehicleDto
+import com.example.mawqifi.features.profile.service.dto.CreateVehicleDto
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CreateVehicleRequest(

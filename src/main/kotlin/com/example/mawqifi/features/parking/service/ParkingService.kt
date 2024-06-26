@@ -7,5 +7,6 @@ interface ParkingService {
     fun getNearbyParking(latitude: Double, longitude: Double): List<ParkingDto>
     fun createAParking(createAParkingDto: CreateAParkingDto):Boolean
     fun getParkingByName(name: String, latitude: Double, longitude: Double): List<ParkingDto>
+    fun getParkingDetails(parkingId: Long):ParkingDto
 
 }

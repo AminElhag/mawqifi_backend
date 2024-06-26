@@ -1,6 +1,6 @@
 package com.example.mawqifi.features.profile.controller.model
 
-import com.example.mawqifi.features.profile.service.model.CreateProfileDto
+import com.example.mawqifi.features.profile.service.dto.CreateProfileDto
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CreateProfileRequest(
@@ -19,7 +19,7 @@ data class CreateProfileRequest(
 ) {
     fun toCreateProfileDto(): CreateProfileDto {
         return CreateProfileDto(
-            phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
+            null, phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
         )
     }
 }

@@ -1,3 +1,3 @@
 package com.example.mawqifi.exception
 
-class AddVehicleException(message: String) : RuntimeException(message)
+class AddVehicleException : RuntimeException("This number has not have a account")

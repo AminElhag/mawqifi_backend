@@ -1,5 +1,6 @@
 package com.example.mawqifi.features.parking.service
 
+import com.example.mawqifi.exception.ParkingNotFoundException
 import com.example.mawqifi.features.parking.repository.ParkingRepository
 import com.example.mawqifi.features.parking.repository.entity.ParkingEntity
 import com.example.mawqifi.features.parking.service.dto.CreateAParkingDto
@@ -14,7 +15,7 @@ class ParkingServiceImpl : ParkingService {
     lateinit var parkingRepository: ParkingRepository
 
     override fun getNearbyParking(latitude: Double, longitude: Double): List<ParkingDto> {
-        var parking = parkingRepository.findAll()
+        val parking = parkingRepository.findAll()
         val map = parking.map {
             it.toParkingDto(latitude, longitude)
         }
@@ -25,12 +26,19 @@ class ParkingServiceImpl : ParkingService {
         parkingRepository.save(
             ParkingEntity(
                 name = createAParkingDto.name,
-                description = createAParkingDto.description,
                 latitude = createAParkingDto.latitude,
                 longitude = createAParkingDto.longitude,
-                price = createAParkingDto.price,
-                imageUrl = createAParkingDto.image,
                 typeId = createAParkingDto.typeId,
+                price = createAParkingDto.price,
+                bigImageUrl = createAParkingDto.bigImageUrl,
+                ratting = createAParkingDto.rating,
+                shortAddress = createAParkingDto.shortAddress,
+                longAddress = createAParkingDto.longAddress,
+                space = createAParkingDto.space,
+                startTime = createAParkingDto.startTime,
+                endTime = createAParkingDto.endTime,
+                rules = createAParkingDto.rules,
+                imagesUri = createAParkingDto.imagesUrl
             )
         )
         return true
@@ -42,5 +50,13 @@ class ParkingServiceImpl : ParkingService {
         return entities.map {
             it.toParkingDto(latitude, longitude)
         }
+    }
+
+    override fun getParkingDetails(parkingId: Long): ParkingDto {
+        val entityOptional = parkingRepository.findById(parkingId)
+        if (entityOptional.isEmpty) {
+            throw ParkingNotFoundException()
+        }
+        return entityOptional.get().toParkingDto()
     }
 }

@@ -1,9 +1,10 @@
-package com.example.mawqifi.features.profile.service.model
+package com.example.mawqifi.features.profile.service.dto
 
 import com.example.mawqifi.features.profile.controller.model.CreatedProfileResponse
 import com.example.mawqifi.features.profile.repository.entity.ProfileEntity
 
 data class CreateProfileDto(
+    val userId:Long?=null,
     val phoneNumber: String,
     val fullName: String,
     val homeAddress: String,
@@ -23,6 +24,6 @@ data class CreateProfileDto(
     }
 
     fun toCreatedProfileResponse(): CreatedProfileResponse {
-        return CreatedProfileResponse(phoneNumber, fullName, homeAddress, genderTypeId)
+        return CreatedProfileResponse(userId!!, phoneNumber, fullName, homeAddress, genderTypeId)
     }
 }

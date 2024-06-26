@@ -1,6 +1,8 @@
 package com.example.mawqifi.common
 
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -17,6 +19,11 @@ class Helper {
                     sin(dLon / 2) * sin(dLon / 2)
             val c = 2 * atan2(sqrt(a), sqrt(1 - a))
             return (earthRadius * c).toBigDecimal().setScale(1, RoundingMode.HALF_UP).toDouble()
+        }
+
+        fun stringToDate(dateStr: String): Date {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            return dateFormat.parse(dateStr)
         }
     }
 }

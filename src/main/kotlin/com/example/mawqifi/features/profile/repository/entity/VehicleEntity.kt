@@ -1,5 +1,7 @@
 package com.example.mawqifi.features.profile.repository.entity
 
+import com.example.mawqifi.features.booking.repository.entity.BookingEntity
+import com.example.mawqifi.features.profile.service.dto.VehicleDto
 import jakarta.persistence.*
 
 @Entity
@@ -19,5 +21,10 @@ data class VehicleEntity(
     val carTypeId: Int = 0,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val profileEntity: ProfileEntity = ProfileEntity()
-)
+    val profileEntity: ProfileEntity = ProfileEntity(),
+    @OneToMany(mappedBy = "vehicleEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val bookingEntity: List<BookingEntity?>? = null
+
+) {
+    fun toVehicleDto() = VehicleDto(brand, model, plantNo, color, carTypeId, id)
+}

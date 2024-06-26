@@ -1,6 +1,7 @@
 package com.example.mawqifi.features.parking.repository.entity
 
 import com.example.mawqifi.common.Helper
+import com.example.mawqifi.features.booking.repository.entity.BookingEntity
 import com.example.mawqifi.features.parking.service.dto.ParkingDto
 import jakarta.persistence.*
 
@@ -12,8 +13,6 @@ data class ParkingEntity(
     @Column(nullable = false)
     var name: String = "",
     @Column(nullable = false)
-    var description: String = "",
-    @Column(nullable = false)
     var latitude: Double = 0.0,
     @Column(nullable = false)
     var longitude: Double = 0.0,
@@ -24,17 +23,47 @@ data class ParkingEntity(
     @Column(nullable = false)
     val price: Double = 0.0,
     @Column(nullable = false)
-    val imageUrl: String = "",
+    val bigImageUrl: String = "",
+    @Column(nullable = false)
+    val ratting: Double = 0.0,
+    @Column(nullable = false)
+    val shortAddress: String = "",
+    @Column(nullable = false)
+    val longAddress: String = "",
+    @Column(nullable = false)
+    val space: Double = 0.0,
+    @Column(nullable = false)
+    val startTime: Int = 0,
+    @Column(nullable = false)
+    val endTime: Int = 0,
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    val rules: String = "",
+    @ElementCollection(targetClass = String::class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "images", joinColumns = [JoinColumn(name = "image_id")])
+    @Column(name = "images", nullable = true)
+    val imagesUri: List<String> = ArrayList(),
+    @OneToMany(mappedBy = "parkingEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val bookingEntity: List<BookingEntity?>? = null,
 ) {
-    fun toParkingDto(latitude: Double, longitude: Double): ParkingDto {
+    fun toParkingDto(latitude: Double? = null, longitude: Double? = null): ParkingDto {
         return ParkingDto(
+            parkingId = id,
             name = name,
-            description = description,
             typeId = typeId,
             price = price,
-            imageUrl = imageUrl,
+            bigImageUrl = bigImageUrl,
             statusId = statusId,
-            distance = Helper.calculateDistance(latitude, longitude, this.latitude, this.longitude)
+            distance = if (latitude != null && longitude != null) {
+                Helper.calculateDistance(latitude, longitude, this.latitude, this.longitude)
+            } else 0.0,
+            ratting = ratting,
+            startTime = startTime,
+            endTime = endTime,
+            space = space,
+            shortAddress = shortAddress,
+            longAddress = longAddress,
+            rules = rules,
+            imagesUri = imagesUri
         )
     }
 

@@ -1,4 +1,4 @@
-package com.example.mawqifi.features.profile.service.model
+package com.example.mawqifi.features.profile.service.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

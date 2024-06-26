@@ -1,9 +1,9 @@
 package com.example.mawqifi.features.profile.repository.entity
 
-import com.example.mawqifi.features.profile.service.model.CreateProfileDto
+import com.example.mawqifi.features.booking.repository.entity.BookingEntity
+import com.example.mawqifi.features.profile.service.dto.CreateProfileDto
 import jakarta.persistence.*
 import java.util.*
-import kotlin.collections.List
 
 @Entity
 data class ProfileEntity(
@@ -27,11 +27,13 @@ data class ProfileEntity(
     @Column(nullable = false)
     val updateAt: Date = Date(System.currentTimeMillis()),
     @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val vehicleEntity: List<VehicleEntity?>? = null
+    val vehicleEntity: List<VehicleEntity?>? = null,
+    @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val bookingEntity: List<BookingEntity?>? = null,
 ) {
     fun toCreateProfileDto(): CreateProfileDto {
         return CreateProfileDto(
-            phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
+            id, phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
         )
     }
 }

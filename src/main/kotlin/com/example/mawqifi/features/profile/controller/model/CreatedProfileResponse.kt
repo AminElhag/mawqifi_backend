@@ -3,6 +3,8 @@ package com.example.mawqifi.features.profile.controller.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CreatedProfileResponse(
+    @JsonProperty("user_id")
+    val userId: Long,
     @JsonProperty("phone_number")
     val phoneNumber: String,
     @JsonProperty("full_name")
