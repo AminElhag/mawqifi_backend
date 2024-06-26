@@ -28,4 +28,6 @@ data class BookingEntity(
     val createAt: Date = Date(System.currentTimeMillis()),
     @Column(name = "update_at")
     val updateAt: Date = Date(System.currentTimeMillis()),
+    @Column(name = "status_id")
+    val statusId: Int = 0
 )

@@ -8,6 +8,7 @@ import com.example.mawqifi.features.booking.repository.BookingRepository
 import com.example.mawqifi.features.booking.repository.entity.BookingEntity
 import com.example.mawqifi.features.booking.server.BookingServer
 import com.example.mawqifi.features.booking.server.dto.BookingDto
+import com.example.mawqifi.features.booking.server.dto.BookingListItemDto
 import com.example.mawqifi.features.parking.repository.ParkingRepository
 import com.example.mawqifi.features.profile.repository.ProfileRepository
 import com.example.mawqifi.features.profile.repository.VehicleRepository
@@ -42,7 +43,7 @@ class BookingServerImpl : BookingServer {
             throw VehicleProfileDoesNotMatch()
         }
         val parking = parkingRepository.findById(bookingDto.parkingId.toLong())
-        if (profile.isEmpty){
+        if (profile.isEmpty) {
             throw ParkingNotFoundException()
         }
         val entity = BookingEntity(
@@ -53,5 +54,28 @@ class BookingServerImpl : BookingServer {
             until = bookingDto.until,
         )
         return bookingRepository.save(entity)
+    }
+
+    override fun getBookingList(profileId: Long): List<BookingListItemDto> {
+        val profile = profileRepository.findById(profileId)
+        if (profile.isEmpty) {
+            throw ProfileNotFoundException()
+        }
+        val list = bookingRepository.findAllByProfileEntityOrderByCreateAtDesc(profile.get()).map {
+            if (parkingRepository.findById(it.parkingEntity.id).isEmpty) {
+                throw ParkingNotFoundException()
+            }
+            BookingListItemDto(
+                id = it.id,
+                imageUrl = it.parkingEntity.bigImageUrl,
+                name = it.parkingEntity.name,
+                longAddress = it.parkingEntity.longAddress,
+                price = it.parkingEntity.price,
+                from = it.from,
+                until = it.until,
+                statusId = it.statusId
+            )
+        }
+        return list
     }
 }
