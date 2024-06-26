@@ -12,6 +12,7 @@ import com.example.mawqifi.features.profile.service.dto.CreateVehicleDto
 import com.example.mawqifi.features.profile.service.dto.VehicleDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class ProfileServiceImpl : ProfileService {
@@ -23,6 +24,15 @@ class ProfileServiceImpl : ProfileService {
     lateinit var vehicleRepository: VehicleRepository
 
     override fun createProfile(createProfileDto: CreateProfileDto): CreateProfileDto {
+        val findByPhoneNumber = profileRepository.findByPhoneNumber(createProfileDto.phoneNumber)
+        if (findByPhoneNumber != null){
+         return profileRepository.save(findByPhoneNumber.copy(
+             fullName = createProfileDto.fullName,
+             phoneNumber = createProfileDto.phoneNumber,
+             genderTypeId = createProfileDto.genderTypeId,
+             updateAt =  Date(System.currentTimeMillis())
+         )).toCreateProfileDto()
+        }
         val entity = profileRepository.save(createProfileDto.toProfileEntity())
         return entity.toCreateProfileDto()
     }
