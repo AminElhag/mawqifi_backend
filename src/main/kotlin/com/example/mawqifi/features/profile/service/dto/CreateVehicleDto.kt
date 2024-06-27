@@ -15,4 +15,6 @@ data class CreateVehicleDto(
     val color: String,
     @JsonProperty("car_type_id")
     val carTypeId: Int,
+    @JsonProperty("id")
+    val id: Int?=null,
 )

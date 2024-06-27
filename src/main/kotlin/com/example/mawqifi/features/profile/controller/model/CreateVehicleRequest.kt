@@ -16,8 +16,10 @@ data class CreateVehicleRequest(
     val color: String,
     @JsonProperty("car_type_id")
     val carTypeId: Int,
+    @JsonProperty("id")
+    val id: Int?=null,
 ) {
     fun toCreateVehicleDto(): CreateVehicleDto {
-        return CreateVehicleDto(phoneNumber, brand, model, plantNo, color, carTypeId)
+        return CreateVehicleDto(phoneNumber, brand, model, plantNo, color, carTypeId,id)
     }
 }

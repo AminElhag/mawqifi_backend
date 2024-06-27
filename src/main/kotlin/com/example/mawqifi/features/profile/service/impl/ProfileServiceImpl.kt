@@ -1,8 +1,6 @@
 package com.example.mawqifi.features.profile.service.impl
 
-import com.example.mawqifi.exception.AddVehicleException
-import com.example.mawqifi.exception.ProfileHaveNotAddAnyVehicle
-import com.example.mawqifi.exception.ProfileNotFoundException
+import com.example.mawqifi.exception.*
 import com.example.mawqifi.features.profile.repository.ProfileRepository
 import com.example.mawqifi.features.profile.repository.VehicleRepository
 import com.example.mawqifi.features.profile.repository.entity.VehicleEntity
@@ -25,13 +23,15 @@ class ProfileServiceImpl : ProfileService {
 
     override fun createProfile(createProfileDto: CreateProfileDto): CreateProfileDto {
         val findByPhoneNumber = profileRepository.findByPhoneNumber(createProfileDto.phoneNumber)
-        if (findByPhoneNumber != null){
-         return profileRepository.save(findByPhoneNumber.copy(
-             fullName = createProfileDto.fullName,
-             phoneNumber = createProfileDto.phoneNumber,
-             genderTypeId = createProfileDto.genderTypeId,
-             updateAt =  Date(System.currentTimeMillis())
-         )).toCreateProfileDto()
+        if (findByPhoneNumber != null) {
+            return profileRepository.save(
+                findByPhoneNumber.copy(
+                    fullName = createProfileDto.fullName,
+                    phoneNumber = createProfileDto.phoneNumber,
+                    genderTypeId = createProfileDto.genderTypeId,
+                    updateAt = Date(System.currentTimeMillis())
+                )
+            ).toCreateProfileDto()
         }
         val entity = profileRepository.save(createProfileDto.toProfileEntity())
         return entity.toCreateProfileDto()
@@ -40,16 +40,35 @@ class ProfileServiceImpl : ProfileService {
     override fun createVehicle(createVehicleDto: CreateVehicleDto) {
         val profileEntity = profileRepository.findByPhoneNumber(createVehicleDto.phoneNumber)
             ?: throw AddVehicleException()
-        vehicleRepository.save(
-            VehicleEntity(
-                brand = createVehicleDto.brand,
-                model = createVehicleDto.model,
-                plantNo = createVehicleDto.plantNo,
-                color = createVehicleDto.color,
-                carTypeId = createVehicleDto.carTypeId,
-                profileEntity = profileEntity
+        if (createVehicleDto.id != null) {
+            val entityOptional = vehicleRepository.findById(createVehicleDto.id.toLong())
+            if (entityOptional.isEmpty) {
+                throw VehicleNotFoundException()
+            }
+            if (entityOptional.get().profileEntity != profileEntity) {
+                throw VehicleProfileDoesNotMatch()
+            }
+            vehicleRepository.save(
+                entityOptional.get().copy(
+                    brand = createVehicleDto.brand,
+                    model = createVehicleDto.model,
+                    plantNo = createVehicleDto.plantNo,
+                    color = createVehicleDto.color,
+                    carTypeId = createVehicleDto.carTypeId,
+                )
             )
-        )
+        }else{
+            vehicleRepository.save(
+                VehicleEntity(
+                    brand = createVehicleDto.brand,
+                    model = createVehicleDto.model,
+                    plantNo = createVehicleDto.plantNo,
+                    color = createVehicleDto.color,
+                    carTypeId = createVehicleDto.carTypeId,
+                    profileEntity = profileEntity
+                )
+            )
+        }
     }
 
     override fun getVehiclesByUserId(userId: Long): List<VehicleDto> {
