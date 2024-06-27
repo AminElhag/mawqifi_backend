@@ -8,11 +8,13 @@ import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.error.ErrorController
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 
 @SpringBootApplication
+@EnableScheduling
 class MawqifiApplication
 
 fun main(args: Array<String>) {

@@ -15,3 +15,9 @@ otp:
     time: 10400000
 server:
   port: 9215
+
+scheduled:
+  fixedRate:
+    time: 3600000
+
+

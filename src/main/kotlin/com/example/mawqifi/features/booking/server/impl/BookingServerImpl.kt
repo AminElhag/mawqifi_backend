@@ -13,7 +13,10 @@ import com.example.mawqifi.features.parking.repository.ParkingRepository
 import com.example.mawqifi.features.profile.repository.ProfileRepository
 import com.example.mawqifi.features.profile.repository.VehicleRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class BookingServerImpl : BookingServer {
@@ -29,6 +32,9 @@ class BookingServerImpl : BookingServer {
 
     @Autowired
     lateinit var parkingRepository: ParkingRepository
+
+    @Value("\${scheduled.fixedRate.time}")
+    private val otpExpiryTime: Int = 10400000
 
     override fun save(bookingDto: BookingDto): BookingEntity {
         val profile = profileRepository.findById(bookingDto.userId.toLong())
@@ -77,5 +83,22 @@ class BookingServerImpl : BookingServer {
             )
         }
         return list
+    }
+
+    @Scheduled(fixedRate = 3600000)
+    fun chickBookingStatus() {
+        val findAll = bookingRepository.findAllByStatusId(BookingEntity.Status.IN_PROGRESS.id)
+        findAll.iterator().forEach {
+            if (it.until.before(Date(System.currentTimeMillis()))) {
+                if (it.statusId == BookingEntity.Status.IN_PROGRESS.id) {
+                    bookingRepository.deleteById(it.id)
+                    bookingRepository.save(
+                        it.copy(
+                            statusId = BookingEntity.Status.COMPLETED.id
+                        )
+                    )
+                }
+            }
+        }
     }
 }

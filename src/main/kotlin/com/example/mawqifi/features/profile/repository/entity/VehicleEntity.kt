@@ -19,10 +19,10 @@ data class VehicleEntity(
     val color: String = "",
     @Column
     val carTypeId: Int = 0,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     val profileEntity: ProfileEntity = ProfileEntity(),
-    @OneToMany(mappedBy = "vehicleEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "vehicleEntity", cascade = [CascadeType.ALL], orphanRemoval = true,fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null
 
 ) {

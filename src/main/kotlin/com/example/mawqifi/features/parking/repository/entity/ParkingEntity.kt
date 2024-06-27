@@ -42,7 +42,7 @@ data class ParkingEntity(
     @CollectionTable(name = "images", joinColumns = [JoinColumn(name = "image_id")])
     @Column(name = "images", nullable = true)
     val imagesUri: List<String> = ArrayList(),
-    @OneToMany(mappedBy = "parkingEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "parkingEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null,
 ) {
     fun toParkingDto(latitude: Double? = null, longitude: Double? = null): ParkingDto {

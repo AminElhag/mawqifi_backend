@@ -26,9 +26,9 @@ data class ProfileEntity(
     val createAt: Date = Date(System.currentTimeMillis()),
     @Column(nullable = false)
     val updateAt: Date = Date(System.currentTimeMillis()),
-    @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true,fetch = FetchType.EAGER)
     val vehicleEntity: List<VehicleEntity?>? = null,
-    @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true,fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null,
 ) {
     fun toCreateProfileDto(): CreateProfileDto {

@@ -11,13 +11,13 @@ data class BookingEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")
     val vehicleEntity: VehicleEntity = VehicleEntity(),
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id")
     val profileEntity: ProfileEntity = ProfileEntity(),
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parking_id")
     val parkingEntity: ParkingEntity = ParkingEntity(),
     @Column(name = "from_cl")
@@ -30,4 +30,8 @@ data class BookingEntity(
     val updateAt: Date = Date(System.currentTimeMillis()),
     @Column(name = "status_id")
     val statusId: Int = 0
-)
+){
+    enum class Status(val id:Int){
+        WAITING(0),IN_PROGRESS(1),COMPLETED(2),CANCELED(3)
+    }
+}

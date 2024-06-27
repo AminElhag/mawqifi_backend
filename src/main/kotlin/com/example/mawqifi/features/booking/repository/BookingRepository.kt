@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BookingRepository:JpaRepository<BookingEntity,Long> {
     fun findAllByProfileEntityOrderByCreateAtDesc(profileEntity:ProfileEntity):List<BookingEntity>
+    fun findAllByStatusIdLessThan(statusId:Int):List<BookingEntity>
+    fun findAllByStatusId(statusId:Int):List<BookingEntity>
 }
