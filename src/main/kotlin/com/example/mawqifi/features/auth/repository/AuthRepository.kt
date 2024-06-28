@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AuthRepository : JpaRepository<MobilePhone, Long> {
     fun findByPhoneNumber(phoneNumber: String):MobilePhone?
-
 }

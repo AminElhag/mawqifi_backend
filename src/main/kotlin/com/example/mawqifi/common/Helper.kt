@@ -25,5 +25,14 @@ class Helper {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             return dateFormat.parse(dateStr)
         }
+
+        fun String?.doesNotContainBearerToken(): Boolean {
+            return this == null || !this.startsWith("Bearer ")
+        }
+
+        fun String.extractTokenValue(): String {
+            return this.substringAfter("Bearer ")
+
+        }
     }
 }

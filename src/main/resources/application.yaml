@@ -21,3 +21,8 @@ scheduled:
     time: 3600000
 
 
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:

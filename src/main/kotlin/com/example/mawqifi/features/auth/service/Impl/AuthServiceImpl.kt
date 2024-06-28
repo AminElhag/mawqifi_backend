@@ -5,8 +5,11 @@ import com.example.mawqifi.features.auth.model.PhoneNumberDto
 import com.example.mawqifi.features.auth.repository.AuthRepository
 import com.example.mawqifi.features.auth.repository.entity.MobilePhone
 import com.example.mawqifi.features.auth.service.AuthService
+import com.example.mawqifi.features.token.service.CustomUserDetailsService
+import com.example.mawqifi.features.token.service.TokenService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
 import java.util.*
@@ -19,6 +22,17 @@ class AuthServiceImpl : AuthService {
 
     @Autowired
     lateinit var authRepository: AuthRepository
+
+    @Autowired
+    lateinit var authManger: AuthenticationManager
+
+    @Autowired
+    lateinit var userDetailsService: CustomUserDetailsService
+
+    @Autowired
+    lateinit var tokenService: TokenService
+
+    var accessTokenExpiration: Long = 3600000
 
     override fun loginByPhoneNumber(phoneNumberDto: PhoneNumberDto) {
         val otp = generateOtp(4)
@@ -39,6 +53,15 @@ class AuthServiceImpl : AuthService {
     override fun otpVerification(otpVerificationDto: OtpVerificationDto): Boolean {
         val phoneNumber = authRepository.findByPhoneNumber(otpVerificationDto.phoneNumber) ?: return false
         return isValidOtp(otpVerificationDto, phoneNumber)
+    }
+
+    override fun token(phoneNumber: String, otp: String): String {
+        val user = userDetailsService.loadUserByUsername(phoneNumber)
+
+        val token =
+            tokenService.generate(user, Date(System.currentTimeMillis() + accessTokenExpiration))
+
+        return token
     }
 
     private fun isValidOtp(otpVerificationDto: OtpVerificationDto, phoneNumber: MobilePhone): Boolean {
