@@ -3,6 +3,7 @@ package com.example.mawqifi.features.token.service
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.*
@@ -10,12 +11,11 @@ import java.util.*
 @Service
 class TokenService {
 
-    companion object {
-        const val SECRET: String = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629"
-    }
+    @Value("\${token.key.secret}")
+    private val secret: String = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629"
 
     private val securityKey = Keys.hmacShaKeyFor(
-        SECRET.toByteArray()
+        secret.toByteArray()
     )
 
     fun generate(

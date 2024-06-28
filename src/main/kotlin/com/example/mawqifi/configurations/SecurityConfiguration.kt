@@ -12,7 +12,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 class SecurityConfiguration {
 
     @Autowired

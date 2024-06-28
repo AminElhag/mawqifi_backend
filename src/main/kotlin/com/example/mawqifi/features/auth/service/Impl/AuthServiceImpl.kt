@@ -24,14 +24,12 @@ class AuthServiceImpl : AuthService {
     lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var authManger: AuthenticationManager
-
-    @Autowired
     lateinit var userDetailsService: CustomUserDetailsService
 
     @Autowired
     lateinit var tokenService: TokenService
 
+    @Value("\${token.key.expiry.time}")
     var accessTokenExpiration: Long = 3600000
 
     override fun loginByPhoneNumber(phoneNumberDto: PhoneNumberDto) {

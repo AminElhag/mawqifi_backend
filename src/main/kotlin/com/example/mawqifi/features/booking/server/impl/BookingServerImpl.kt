@@ -33,8 +33,6 @@ class BookingServerImpl : BookingServer {
     @Autowired
     lateinit var parkingRepository: ParkingRepository
 
-    @Value("\${scheduled.fixedRate.time}")
-    private val otpExpiryTime: Int = 10400000
 
     override fun save(bookingDto: BookingDto): BookingEntity {
         val profile = profileRepository.findById(bookingDto.userId.toLong())
