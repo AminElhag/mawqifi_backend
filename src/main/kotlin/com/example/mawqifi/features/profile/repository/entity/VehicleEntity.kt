@@ -22,7 +22,7 @@ data class VehicleEntity(
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     val profileEntity: ProfileEntity = ProfileEntity(),
-    @OneToMany(mappedBy = "vehicleEntity", cascade = [CascadeType.ALL], orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "vehicleEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null
 
 ) {

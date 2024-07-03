@@ -23,7 +23,6 @@ class ParkingController {
         @RequestParam latitude: Double,
         @RequestParam longitude: Double
     ): List<GetParkingRequest> {
-        println("Yes I am here")
         return if (name.isNullOrBlank()) {
             parkingService.getNearbyParking(latitude, longitude).map {
                 it.toGetParkingRequest()

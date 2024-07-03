@@ -45,7 +45,7 @@ class ParkingServiceImpl : ParkingService {
     }
 
     override fun getParkingByName(name: String, latitude: Double, longitude: Double): List<ParkingDto> {
-        val entities = parkingRepository.findAllByNameContaining(name)
+        val entities = parkingRepository.findAllByNameContains(name)
         println(entities)
         return entities.map {
             it.toParkingDto(latitude, longitude)

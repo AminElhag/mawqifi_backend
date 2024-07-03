@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ParkingRepository:JpaRepository<ParkingEntity,Long> {
-    fun findAllByNameContaining(name: String): List<ParkingEntity>
-
+    fun findAllByNameContains(name: String): List<ParkingEntity>
 }
