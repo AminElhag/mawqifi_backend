@@ -30,10 +30,12 @@ data class ProfileEntity(
     val vehicleEntity: List<VehicleEntity?>? = null,
     @OneToMany(mappedBy = "profileEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null,
+    @Column()
+    val profileType: Int = CreateProfileDto.ProfileType.USER.value
 ) {
     fun toCreateProfileDto(): CreateProfileDto {
         return CreateProfileDto(
-            id, phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
+            id, phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType,profileType
         )
     }
 }

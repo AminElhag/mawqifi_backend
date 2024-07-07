@@ -2,7 +2,9 @@ package com.example.mawqifi.features.parking.repository.entity
 
 import com.example.mawqifi.common.Helper
 import com.example.mawqifi.features.booking.repository.entity.BookingEntity
+import com.example.mawqifi.features.driver.repository.entity.DriverEntity
 import com.example.mawqifi.features.parking.service.dto.ParkingDto
+import com.example.mawqifi.features.profile.repository.entity.VehicleEntity
 import jakarta.persistence.*
 
 @Entity(name = "parking_entity")
@@ -44,6 +46,8 @@ data class ParkingEntity(
     val imagesUri: List<String> = ArrayList(),
     /*@OneToMany(mappedBy = "parkingEntity",fetch = FetchType.EAGER)
     val bookingEntity: List<BookingEntity?>? = null,*/
+    @OneToMany(mappedBy = "parkingEntity", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    val driverEntity: List<DriverEntity?>? = null,
 ) {
     fun toParkingDto(latitude: Double? = null, longitude: Double? = null): ParkingDto {
         return ParkingDto(

@@ -1,6 +1,8 @@
 package com.example.mawqifi.features.booking.server.dto
 
 import com.example.mawqifi.features.booking.controller.model.GetBookingListResponse
+import com.example.mawqifi.features.parking.repository.entity.ParkingEntity
+import com.example.mawqifi.features.profile.repository.entity.VehicleEntity
 import java.util.*
 
 data class BookingListItemDto(
@@ -11,7 +13,9 @@ data class BookingListItemDto(
     val price: Double,
     val from: Date,
     val until: Date,
-    val statusId: Int
+    val statusId: Int,
+    val parkingEntity: ParkingEntity?=null,
+    val vehicleEntity: VehicleEntity?=null
 ) {
     fun toGetBookingListResponse() = GetBookingListResponse(
         id = id,
@@ -21,6 +25,7 @@ data class BookingListItemDto(
         price = price,
         from = from,
         until = until,
-        statusId = statusId
+        statusId = statusId,
+        vehicleResponse = vehicleEntity?.toVehicleDto()?.toVehicleResponse()
     )
 }

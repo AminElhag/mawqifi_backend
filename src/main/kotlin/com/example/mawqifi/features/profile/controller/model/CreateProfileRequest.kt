@@ -19,7 +19,14 @@ data class CreateProfileRequest(
 ) {
     fun toCreateProfileDto(): CreateProfileDto {
         return CreateProfileDto(
-            null, phoneNumber, fullName, homeAddress, genderTypeId, platformDeviceId, platformType
+            null,
+            phoneNumber,
+            fullName,
+            homeAddress,
+            genderTypeId,
+            platformDeviceId,
+            platformType,
+            CreateProfileDto.ProfileType.USER.value
         )
     }
 }

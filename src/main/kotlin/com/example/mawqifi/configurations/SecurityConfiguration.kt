@@ -27,7 +27,9 @@ class SecurityConfiguration {
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("api/auth/mobile","api/auth/otp/verification", "/error")
+                    .requestMatchers("api/auth/mobile","api/auth/otp/verification", "/error","/single-notification")
+                    .permitAll()
+                    .requestMatchers("api/driver/auth/mobile","api/driver/auth/otp/verification")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "api/profile")
                     .permitAll()

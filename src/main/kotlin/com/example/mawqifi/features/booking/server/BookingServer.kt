@@ -7,5 +7,6 @@ import com.example.mawqifi.features.booking.server.dto.BookingListItemDto
 interface BookingServer {
     fun save(bookingDto: BookingDto): BookingEntity
     fun getBookingList(profileId: Long): List<BookingListItemDto>
+    fun getBookingDriverRequest(typeId: Int, driverId: Long): List<BookingListItemDto>
 
 }

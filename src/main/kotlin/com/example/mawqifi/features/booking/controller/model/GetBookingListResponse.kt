@@ -1,5 +1,7 @@
 package com.example.mawqifi.features.booking.controller.model
 
+import com.example.mawqifi.features.profile.controller.model.CreateVehicleRequest
+import com.example.mawqifi.features.profile.controller.model.VehicleResponse
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
@@ -12,4 +14,5 @@ data class GetBookingListResponse(
     @JsonProperty("from") val from: Date,
     @JsonProperty("until") val until: Date,
     @JsonProperty("status_id") val statusId: Int,
+    @JsonProperty("vehicle") val vehicleResponse: VehicleResponse?
 )

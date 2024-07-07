@@ -39,7 +39,7 @@ class MyErrorController : ErrorController {
                 return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
-        val errorResponse = ErrorResponse(HttpStatus.FORBIDDEN.value(), "Sorry, but we can't 👽")
+        val errorResponse = ErrorResponse(HttpStatus.FORBIDDEN.value(), "You are not allow to do that")
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 

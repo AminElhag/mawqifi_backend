@@ -9,13 +9,16 @@ import com.example.mawqifi.features.booking.repository.entity.BookingEntity
 import com.example.mawqifi.features.booking.server.BookingServer
 import com.example.mawqifi.features.booking.server.dto.BookingDto
 import com.example.mawqifi.features.booking.server.dto.BookingListItemDto
+import com.example.mawqifi.features.driver.repository.DriverRepository
+import com.example.mawqifi.features.fcm.FcmService
+import com.example.mawqifi.features.fcm.MessageDTO
 import com.example.mawqifi.features.parking.repository.ParkingRepository
 import com.example.mawqifi.features.profile.repository.ProfileRepository
 import com.example.mawqifi.features.profile.repository.VehicleRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 import java.util.*
 
 @Service
@@ -32,6 +35,12 @@ class BookingServerImpl : BookingServer {
 
     @Autowired
     lateinit var parkingRepository: ParkingRepository
+
+    @Autowired
+    lateinit var fcmService: FcmService
+
+    @Autowired
+    lateinit var driverRepository: DriverRepository
 
 
     override fun save(bookingDto: BookingDto): BookingEntity {
@@ -57,6 +66,17 @@ class BookingServerImpl : BookingServer {
             from = bookingDto.from,
             until = bookingDto.until,
         )
+
+        val findAllByParkingEntity = driverRepository.findAllByParkingEntity(parkingEntity = parking.get())
+        findAllByParkingEntity?.forEach {driver ->
+            driver?.fcmToken?.let {
+                fcmService.sendNotificationToSpecificDevice(MessageDTO("New Order Is here","""
+                    Mr. ${profile.get().fullName} is here go and take ${vehicle.get().model}
+                """.trimIndent(),parking.get().bigImageUrl,
+                    mapOf("parking_id" to "${parking.get().id}")
+                ), it)
+            }
+        }
         return bookingRepository.save(entity)
     }
 
@@ -98,5 +118,22 @@ class BookingServerImpl : BookingServer {
                 }
             }
         }
+    }
+
+    override fun getBookingDriverRequest(typeId: Int, driverId: Long): List<BookingListItemDto> {
+        val list =
+            bookingRepository.findAllByDriverIdAndStatusId(driverId = driverId, statusId = typeId).map {
+                BookingListItemDto(
+                    id = it.id,
+                    imageUrl = it.parkingEntity.bigImageUrl,
+                    name = it.parkingEntity.name,
+                    longAddress = it.parkingEntity.longAddress,
+                    price = it.parkingEntity.price,
+                    from = it.from,
+                    until = it.until,
+                    statusId = it.statusId,
+                )
+            }
+        return list
     }
 }

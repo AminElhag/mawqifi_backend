@@ -1,8 +1,8 @@
-package com.example.mawqifi.features.profile.controller.model
+package com.example.mawqifi.features.driver.controller.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CreatedProfileResponse(
+data class CreatedDriverResponse(
     @JsonProperty("user_id")
     val userId: Long,
     @JsonProperty("phone_number")
@@ -13,6 +13,6 @@ data class CreatedProfileResponse(
     val homeAddress: String,
     @JsonProperty("gender_type_id")
     val genderTypeId: Int,
-    @JsonProperty("type_id")
-    val typeId: Int,
+    @JsonProperty("parking_id")
+    val parkingId: Long,
 )

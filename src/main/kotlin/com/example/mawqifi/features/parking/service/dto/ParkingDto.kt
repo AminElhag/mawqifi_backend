@@ -44,4 +44,25 @@ data class ParkingDto(
     fun toGetParkingDetailsRequest() = GetParkingDetailsRequest(
         parkingId, name, price, ratting, shortAddress, longAddress, space, startTime, endTime, rules, imagesUri
     )
+
+    fun toMap(): Map<String, String> {
+        return mapOf(
+            "parking_id" to parkingId.toString(),
+            "name" to name,
+            "distance" to distance.toString(),
+            "type_id" to typeId.toString(),
+            "status_id" to statusId.toString(),
+            "price" to price.toString(),
+            "big_image_url" to bigImageUrl,
+            "ratting" to ratting.toString(),
+            "short_address" to shortAddress,
+            "long_address" to longAddress,
+            "space" to space.toString(),
+            "start_time" to startTime.toString(),
+            "end_time" to endTime.toString(),
+            "rules" to rules,
+            "images_uri" to imagesUri.toString()
+        )
+    }
+
 }

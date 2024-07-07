@@ -11,6 +11,7 @@ data class CreateProfileDto(
     val genderTypeId: Int,
     val platformDeviceId: String,
     val platformType: String,
+    val profileTypeId:Int
 ) {
     fun toProfileEntity(): ProfileEntity {
         return ProfileEntity(
@@ -20,10 +21,15 @@ data class CreateProfileDto(
             genderTypeId = genderTypeId,
             platformType = platformType,
             platformDeviceId = platformDeviceId,
+            profileType = profileTypeId
         )
     }
 
     fun toCreatedProfileResponse(): CreatedProfileResponse {
-        return CreatedProfileResponse(userId!!, phoneNumber, fullName, homeAddress, genderTypeId)
+        return CreatedProfileResponse(userId!!, phoneNumber, fullName, homeAddress, genderTypeId,profileTypeId)
+    }
+
+    enum class ProfileType(val value: Int) {
+        USER(0), Driver(1)
     }
 }
