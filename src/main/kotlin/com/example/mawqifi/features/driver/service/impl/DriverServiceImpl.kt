@@ -1,6 +1,7 @@
 package com.example.mawqifi.features.driver.service.impl
 
 import com.example.mawqifi.exception.DriverNumberIsAlreadyUsedException
+import com.example.mawqifi.exception.ProfileNotFoundException
 import com.example.mawqifi.features.booking.repository.BookingRepository
 import com.example.mawqifi.features.booking.repository.entity.BookingEntity
 import com.example.mawqifi.features.booking.server.dto.BookingDto
@@ -67,6 +68,12 @@ class DriverServiceImpl : DriverService {
                 vehicleEntity = it.vehicleEntity
             )
         }
+    }
+
+    override fun setFcmToken(fcmToken: String, driverId: Long) {
+        val findById = driverRepository.findById(driverId)
+        if(findById.isEmpty) throw ProfileNotFoundException()
+        driverRepository.save(findById.get().copy(fcmToken = fcmToken))
     }
 
     override fun bookingAccept(bookingId: Long, driverId: Long) {

@@ -11,5 +11,6 @@ interface DriverService {
     fun getBookingRequestByType(typeId: Int, userId: Long): List<BookingListItemDto>
     fun bookingAccept(bookingId: Long, driverId: Long)
     fun bookingComplete(bookingId: Long, driverId: Long)
+    fun setFcmToken(fcmToken: String, driverId: Long)
 
 }

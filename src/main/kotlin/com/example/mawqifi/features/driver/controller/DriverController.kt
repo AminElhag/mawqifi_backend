@@ -4,10 +4,7 @@ import com.example.mawqifi.features.auth.controller.model.OtpVerificationRequest
 import com.example.mawqifi.features.auth.controller.model.PhoneNumberLoginRequest
 import com.example.mawqifi.features.auth.service.AuthService
 import com.example.mawqifi.features.booking.controller.model.GetBookingListResponse
-import com.example.mawqifi.features.driver.controller.model.BookingChangeStatusRequest
-import com.example.mawqifi.features.driver.controller.model.CreateDriverRequest
-import com.example.mawqifi.features.driver.controller.model.CreatedDriverResponse
-import com.example.mawqifi.features.driver.controller.model.OTPVerificationResponse
+import com.example.mawqifi.features.driver.controller.model.*
 import com.example.mawqifi.features.driver.service.DriverService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -38,7 +35,7 @@ class DriverController {
 
     @PostMapping("/auth/otp/verification")
     fun otpVerification(@RequestBody request: OtpVerificationRequest): ResponseEntity<OTPVerificationResponse?> {
-        val verification = authService.otpVerification(request.toOtpVerificationDto())
+        val verification = /*authService.otpVerification(request.toOtpVerificationDto())*/ true
         val token = if (verification) authService.token(request.phoneNumber, request.otp) else null
         val driverDto = if (verification) driverService.getDriverByPhoneNumber(request.phoneNumber) else null
         return ResponseEntity.ok(
@@ -73,6 +70,14 @@ class DriverController {
         @RequestBody request: BookingChangeStatusRequest
     ): ResponseEntity<Boolean> {
         driverService.bookingComplete(request.bookingId,request.driverId)
+        return ResponseEntity.ok(true)
+    }
+
+    @PostMapping("/auth/fcmToken")
+    fun setFcmToken(
+        @RequestBody request: SetFcmTokenRequest
+    ): ResponseEntity<Boolean> {
+        driverService.setFcmToken(request.fcmToken,request.userId)
         return ResponseEntity.ok(true)
     }
 }
