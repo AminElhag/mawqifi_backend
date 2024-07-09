@@ -1,6 +1,8 @@
 package com.example.mawqifi.features.booking.repository.entity
 
+import com.example.mawqifi.features.booking.server.dto.BookingDetailsDto
 import com.example.mawqifi.features.booking.server.dto.BookingDto
+import com.example.mawqifi.features.driver.service.model.DriverDto
 import com.example.mawqifi.features.parking.repository.entity.ParkingEntity
 import com.example.mawqifi.features.profile.repository.entity.ProfileEntity
 import com.example.mawqifi.features.profile.repository.entity.VehicleEntity
@@ -32,7 +34,7 @@ data class BookingEntity(
     @Column(name = "status_id")
     val statusId: Int = 0,
     @Column(name = "driver_id")
-    val driverId: Long = 0,
+    val driverId: Long? = 0,
 ) {
     fun toDto() = BookingDto(
         parkingId = id.toString(),
@@ -40,6 +42,10 @@ data class BookingEntity(
         vehicleId = vehicleEntity.id.toString(),
         from = from,
         until = until,
+    )
+
+    fun toBookingDetailsDto(driver: DriverDto? = null) = BookingDetailsDto(
+        id,vehicleEntity.toVehicleDto(),parkingEntity.toParkingDto(),from,until,statusId,driver
     )
 
     enum class Status(val id: Int) {

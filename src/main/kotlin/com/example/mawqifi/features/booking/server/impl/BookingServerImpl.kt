@@ -1,12 +1,10 @@
 package com.example.mawqifi.features.booking.server.impl
 
-import com.example.mawqifi.exception.ParkingNotFoundException
-import com.example.mawqifi.exception.ProfileNotFoundException
-import com.example.mawqifi.exception.VehicleNotFoundException
-import com.example.mawqifi.exception.VehicleProfileDoesNotMatch
+import com.example.mawqifi.exception.*
 import com.example.mawqifi.features.booking.repository.BookingRepository
 import com.example.mawqifi.features.booking.repository.entity.BookingEntity
 import com.example.mawqifi.features.booking.server.BookingServer
+import com.example.mawqifi.features.booking.server.dto.BookingDetailsDto
 import com.example.mawqifi.features.booking.server.dto.BookingDto
 import com.example.mawqifi.features.booking.server.dto.BookingListItemDto
 import com.example.mawqifi.features.driver.repository.DriverRepository
@@ -18,7 +16,6 @@ import com.example.mawqifi.features.profile.repository.VehicleRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
 import java.util.*
 
 @Service
@@ -68,16 +65,46 @@ class BookingServerImpl : BookingServer {
         )
 
         val findAllByParkingEntity = driverRepository.findAllByParkingEntity(parkingEntity = parking.get())
-        findAllByParkingEntity?.forEach {driver ->
-            driver?.fcmToken?.let {
-                fcmService.sendNotificationToSpecificDevice(MessageDTO("New Order Is here","""
+        try {
+            findAllByParkingEntity?.forEach { driver ->
+                driver?.fcmToken?.let {
+                    fcmService.sendNotificationToSpecificDevice(
+                        MessageDTO(
+                            "New Order Is here", """
                     Mr. ${profile.get().fullName} is here go and take ${vehicle.get().model}
-                """.trimIndent(),parking.get().bigImageUrl,
-                    mapOf("parking_id" to "${parking.get().id}")
-                ), it)
+                """.trimIndent(), parking.get().bigImageUrl,
+                            mapOf("parking_id" to "${parking.get().id}")
+                        ), it
+                    )
+                }
             }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
         return bookingRepository.save(entity)
+    }
+
+    override fun getBookingDetailsById(bookingId: Long): BookingDetailsDto {
+        val findById = bookingRepository.findById(bookingId)
+        if (findById.isEmpty) throw BookingNotFoundException()
+        if (findById.get().driverId == null) return findById.get().toBookingDetailsDto()
+        val driver = driverRepository.findById(findById.get().driverId!!)
+        if (driver.isEmpty) return findById.get().toBookingDetailsDto()
+        return findById.get().toBookingDetailsDto(driver.get().toDriverDto())
+    }
+
+    override fun canceledBooking(bookingId: Long) {
+        val findById = bookingRepository.findById(bookingId)
+        if (findById.isEmpty) throw BookingNotFoundException()
+        if (findById.get().statusId != BookingEntity.Status.WAITING.id) throw BookingIsNotInWaitingException()
+        bookingRepository.save(findById.get().copy(statusId = BookingEntity.Status.CANCELED.id))
+    }
+
+    override fun completedBooking(bookingId: Long) {
+        val findById = bookingRepository.findById(bookingId)
+        if (findById.isEmpty) throw BookingNotFoundException()
+        if (findById.get().statusId != BookingEntity.Status.IN_PROGRESS.id) throw BookingIsNotInProgressException()
+        bookingRepository.save(findById.get().copy(statusId = BookingEntity.Status.COMPLETED.id))
     }
 
     override fun getBookingList(profileId: Long): List<BookingListItemDto> {

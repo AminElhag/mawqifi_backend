@@ -1,7 +1,7 @@
 package com.example.mawqifi.features.parking.service.dto
 
 import com.example.mawqifi.features.parking.controller.model.GetParkingDetailsRequest
-import com.example.mawqifi.features.parking.controller.model.GetParkingRequest
+import com.example.mawqifi.features.parking.controller.model.ParkingResponse
 import com.example.mawqifi.features.parking.repository.entity.ParkingEntity.ParkingType
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -35,10 +35,14 @@ data class ParkingDto(
     @JsonProperty("rules")
     val rules: String = "",
     @JsonProperty("images_url")
-    val imagesUri: List<String> = ArrayList()
+    val imagesUri: List<String> = ArrayList(),
+    @JsonProperty("latitude")
+    val latitude: Double = 0.0,
+    @JsonProperty("longitude")
+    val longitude: Double = 0.0,
 ) {
-    fun toGetParkingRequest() = GetParkingRequest(
-        parkingId, name, price, bigImageUrl, longAddress
+    fun toGetParkingRequest() = ParkingResponse(
+        parkingId, name, price, bigImageUrl, longAddress,latitude,longitude
     )
 
     fun toGetParkingDetailsRequest() = GetParkingDetailsRequest(

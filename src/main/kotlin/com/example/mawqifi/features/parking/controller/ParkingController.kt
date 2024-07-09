@@ -3,7 +3,7 @@ package com.example.mawqifi.features.parking.controller
 import com.example.mawqifi.exception.ParkingNotFoundException
 import com.example.mawqifi.features.parking.controller.model.CreateAParkingRequest
 import com.example.mawqifi.features.parking.controller.model.GetParkingDetailsRequest
-import com.example.mawqifi.features.parking.controller.model.GetParkingRequest
+import com.example.mawqifi.features.parking.controller.model.ParkingResponse
 import com.example.mawqifi.features.parking.service.ParkingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -22,7 +22,7 @@ class ParkingController {
         @RequestParam name: String?,
         @RequestParam latitude: Double,
         @RequestParam longitude: Double
-    ): List<GetParkingRequest> {
+    ): List<ParkingResponse> {
         return if (name.isNullOrBlank()) {
             parkingService.getNearbyParking(latitude, longitude).map {
                 it.toGetParkingRequest()
